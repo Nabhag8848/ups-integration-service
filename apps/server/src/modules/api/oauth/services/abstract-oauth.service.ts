@@ -15,11 +15,11 @@ export abstract class AbstractOAuthService {
   protected abstract getClientCredentialsEndpoint(): string | Promise<string>;
 
   /**
-   *
-   * @param code - The authorization code received from the OAuth provider
-   * @returns The token response from the OAuth provider
+   * This should be implemented by each integration
+   * This will be used to exchange the credentials for a token
+   * @returns The access token
    */
-  protected abstract exchangeCodeForToken(code: string): Promise<void>;
+  protected abstract exchangeCredentialsForToken(): Promise<string>;
 
   /**
    * This should be implemented by each integration
@@ -34,13 +34,15 @@ export abstract class AbstractOAuthService {
    */
   protected abstract getAccessToken(): Promise<string>;
 
-
   /**
    * This should be implemented by each integration
    * This will be used to set the carrier's access token with expiry in redis
    * The key will be the carrier's provider and client id
-    * @param accessToken - The carrier's access token
-    * @param expiry - The expiry date of the access token
+   * @param accessToken - The carrier's access token
+   * @param expiry - The expiry date of the access token
    */
-  protected abstract setAccessTokenWithExpiry(refreshToken: string, expiry: Date): Promise<void>;
+  protected abstract setAccessTokenWithExpiry(
+    refreshToken: string,
+    expiry: Date
+  ): Promise<void>;
 }
