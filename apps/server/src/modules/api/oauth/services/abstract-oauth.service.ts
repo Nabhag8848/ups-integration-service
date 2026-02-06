@@ -33,16 +33,4 @@ export abstract class AbstractOAuthService<T> {
    * @returns The carrier's access token
    */
   protected abstract getAccessToken(): Promise<string>;
-
-  /**
-   * This should be implemented by each integration
-   * This will be used to set the carrier's access token with expiry in redis
-   * The key will be the carrier's provider and client id
-   * @param accessToken - The carrier's access token
-   * @param expiry - The expiry date of the access token
-   */
-  protected abstract setAccessTokenWithExpiry(
-    refreshToken: string,
-    expiry: Date
-  ): Promise<void>;
 }

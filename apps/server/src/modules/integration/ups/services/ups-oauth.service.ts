@@ -1,17 +1,23 @@
 import { AbstractOAuthService } from '@/modules/api/oauth/services/abstract-oauth.service';
 import { UPSOAuthResponseDto } from '@/modules/integration/ups/dtos';
-import { OnModuleInit } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { firstValueFrom } from 'rxjs';
 import { HttpService } from '@nestjs/axios';
+import { CarrierService } from '@/modules/carrier/service/carrier.service';
+import { calculateExpirationDate } from '@/utils';
+import { RedisService } from '@/database/redis/redis.service';
 
+@Injectable()
 export class UPSOAuthService
   extends AbstractOAuthService<UPSOAuthResponseDto>
   implements OnModuleInit
 {
   constructor(
     private readonly configService: ConfigService,
-    private readonly httpService: HttpService
+    private readonly httpService: HttpService,
+    private readonly carrierService: CarrierService,
+    private readonly redisService: RedisService
   ) {
     super();
   }
@@ -23,12 +29,22 @@ export class UPSOAuthService
   private merchantId: string;
 
   async onModuleInit() {
-    const clientId = this.configService.get('UPS_CLIENT_ID');
-    const clientSecret = this.configService.get('UPS_CLIENT_SECRET');
-    const clientCredentialsEndpoint = this.configService.get(
-      'UPS_CLIENT_CREDENTIALS_ENDPOINT'
+    const clientId = this.configService.get<string | undefined>(
+      'UPS_CLIENT_ID'
     );
-    const merchantId = this.configService.get('UPS_MERCHANT_ID');
+    const clientSecret = this.configService.get<string | undefined>(
+      'UPS_CLIENT_SECRET'
+    );
+    const clientCredentialsEndpoint = this.configService.get<
+      string | undefined
+    >('UPS_CLIENT_CREDENTIALS_ENDPOINT');
+    const merchantId = this.configService.get<string | undefined>(
+      'UPS_MERCHANT_ID'
+    );
+
+    if (!clientId || !clientSecret) {
+      throw new Error('UPS_CLIENT_ID and UPS_CLIENT_SECRET must be set');
+    }
 
     if (!clientCredentialsEndpoint) {
       throw new Error('UPS_CLIENT_CREDENTIALS_ENDPOINT must be set');
@@ -36,10 +52,6 @@ export class UPSOAuthService
 
     if (!merchantId) {
       throw new Error('UPS_MERCHANT_ID must be set');
-    }
-
-    if (!clientId || !clientSecret) {
-      throw new Error('UPS_CLIENT_ID and UPS_CLIENT_SECRET must be set');
     }
 
     this.clientId = clientId;
@@ -83,17 +95,71 @@ export class UPSOAuthService
   }
 
   protected async listenForTokenExpiry(): Promise<void> {
-    throw new Error('Method not implemented.');
+    const subscriber = this.redisService.getSubscriber();
+
+    await subscriber.psubscribe(
+      `__keyspace@0__:carrier:access_token:${this.name}:*`
+    );
+
+    subscriber.on('pmessage', async () => {
+      const provider = this.name;
+      const {
+        access_token: accessToken,
+        expires_in: accessTokenExpiresIn,
+        client_id: clientId,
+      } = await this.exchangeCredentialsForToken();
+
+      const accessTokenExpiresAt = calculateExpirationDate(
+        Number(accessTokenExpiresIn)
+      );
+
+      const carrier = {
+        provider,
+        clientId,
+        accessToken,
+        accessTokenExpiresAt,
+      };
+
+      await Promise.all([
+        this.carrierService.upsertCarrier(carrier),
+        this.carrierService.setCachedAccessTokenWithExpiry(carrier),
+      ]);
+    });
   }
 
   protected async getAccessToken(): Promise<string> {
-    throw new Error('Method not implemented.');
-  }
+    const provider = this.name;
+    const clientId = this.clientId;
 
-  protected async setAccessTokenWithExpiry(
-    refreshToken: string,
-    expiry: Date
-  ): Promise<void> {
-    throw new Error('Method not implemented.');
+    const cachedAccessToken =
+      await this.carrierService.getCachedAccessTokenByProviderAndClientId(
+        provider,
+        clientId
+      );
+
+    if (cachedAccessToken) {
+      return cachedAccessToken;
+    }
+
+    const { access_token: accessToken, expires_in: accessTokenExpiresIn } =
+      await this.exchangeCredentialsForToken();
+
+    const accessTokenExpiresAt = calculateExpirationDate(
+      Number(accessTokenExpiresIn)
+    );
+
+    const carrier = {
+      provider,
+      clientId,
+      accessToken,
+      accessTokenExpiresAt,
+    };
+
+    await Promise.all([
+      this.carrierService.upsertCarrier(carrier),
+      this.carrierService.setCachedAccessTokenWithExpiry(carrier),
+    ]);
+
+    return accessToken;
   }
 }
