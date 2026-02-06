@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export abstract class AbstractOAuthService {
+export abstract class AbstractOAuthService<T> {
   /**
    * Integration name (e.g., 'ups', 'fedex', 'usps')
    */
@@ -19,7 +19,7 @@ export abstract class AbstractOAuthService {
    * This will be used to exchange the credentials for a token
    * @returns The access token
    */
-  protected abstract exchangeCredentialsForToken(): Promise<string>;
+  protected abstract exchangeCredentialsForToken(): Promise<T>;
 
   /**
    * This should be implemented by each integration
