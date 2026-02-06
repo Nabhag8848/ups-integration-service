@@ -4,15 +4,14 @@
 
 ```mermaid
 erDiagram
-  company {
+  carrier {
     uuid id PK
     timestamp createdAt
     timestamp updatedAt
-    varchar sourceId
+    varchar clientId
+    varchar provider
     text accessToken
     timestamp accessTokenExpiresAt
-    text refreshToken
-    timestamp refreshTokenExpiresAt
   }
   
 ```
