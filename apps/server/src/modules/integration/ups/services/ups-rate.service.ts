@@ -6,12 +6,10 @@ import { AbstractRateService } from '@/modules/api/rates/service/abstract-rate.s
 import { UPSRateRequestDto } from '../dtos';
 import { UPSOAuthService } from './ups-oauth.service';
 import { TransformRequestPayload } from '@/utils';
+import { RateQuotesResponseDto } from '@/modules/api/rates/dtos';
 
 @Injectable()
-export class UPSRateService extends AbstractRateService<
-  UPSRateRequestDto,
-  unknown
-> {
+export class UPSRateService extends AbstractRateService<UPSRateRequestDto> {
   readonly name = 'ups';
   private ratingEndpoint;
 
@@ -25,7 +23,9 @@ export class UPSRateService extends AbstractRateService<
   }
 
   @TransformRequestPayload(UPSRateRequestDto)
-  async getShippingRates(shipment: UPSRateRequestDto): Promise<unknown> {
+  async getShippingRates(
+    shipment: UPSRateRequestDto
+  ): Promise<RateQuotesResponseDto> {
     const accessToken = await this.upsOAuthService.getAccessToken();
 
     const body = {
@@ -45,6 +45,23 @@ export class UPSRateService extends AbstractRateService<
       })
     );
 
-    return response.data;
+    const ratedShipments = response.data?.RateResponse?.RatedShipment ?? [];
+    const shipments = Array.isArray(ratedShipments)
+      ? ratedShipments
+      : [ratedShipments];
+
+    return {
+      quotes: shipments.map((rated) => ({
+        service: { code: rated.Service.Code },
+        totalCharges: {
+          currencyCode: rated.TotalCharges.CurrencyCode,
+          monetaryValue: Number(rated.TotalCharges.MonetaryValue),
+        },
+        transportationCharges: {
+          currencyCode: rated.TransportationCharges.CurrencyCode,
+          monetaryValue: Number(rated.TransportationCharges.MonetaryValue),
+        },
+      })),
+    };
   }
 }

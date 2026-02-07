@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { GetShippingRatesRequestDto } from './dtos/get-shipping-rates-request.dto';
 import { RatesRegistryService } from './registry/rates.registry';
+import { RateQuotesResponseDto } from './dtos';
 
 @Controller('rates')
 export class RatesController {
@@ -16,7 +17,7 @@ export class RatesController {
   async getShippingRates(
     @Param('carrier') carrier: string,
     @Body() body: GetShippingRatesRequestDto
-  ) {
+  ): Promise<RateQuotesResponseDto> {
     const ratesService = this.ratesRegistryService.getService(carrier);
 
     if (!ratesService) {

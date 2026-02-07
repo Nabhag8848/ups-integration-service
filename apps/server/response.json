@@ -1,0 +1,703 @@
+{
+  "RateResponse": {
+    "Response": {
+      "ResponseStatus": {
+        "Code": "1",
+        "Description": "Success"
+      },
+      "TransactionReference": {
+        "CustomerContext": "Rate Request"
+      }
+    },
+    "RatedShipment": [
+      {
+        "Disclaimer": [
+          {
+            "Code": "01",
+            "Description": "Taxes are included in the shipping cost and apply to the transportation charges but additional duties/taxes may apply and are not reflected in the total amount due."
+          }
+        ],
+        "Service": {
+          "Code": "03",
+          "Description": "UPS Ground"
+        },
+        "RateChart": "1",
+        "Zone": "004",
+        "RatedShipmentAlert": [
+          {
+            "Code": "110971",
+            "Description": "Your invoice may vary from the displayed reference rates"
+          }
+        ],
+        "BillableWeightCalculationMethod": "02",
+        "RatingMethod": "01",
+        "BillingWeight": {
+          "UnitOfMeasurement": {
+            "Code": "LBS",
+            "Description": "Pounds"
+          },
+          "Weight": "5.0"
+        },
+        "TransportationCharges": {
+          "CurrencyCode": "USD",
+          "MonetaryValue": "10.50"
+        },
+        "BaseServiceCharge": {
+          "CurrencyCode": "USD",
+          "MonetaryValue": "10.50"
+        },
+        "ItemizedCharges": [
+          {
+            "Code": "375",
+            "Description": "Fuel Surcharge",
+            "CurrencyCode": "USD",
+            "MonetaryValue": "2.00",
+            "SubType": ""
+          }
+        ],
+        "FRSShipmentData": {
+          "TransportationCharges": {
+            "GrossCharge": {
+              "CurrencyCode": "USD",
+              "MonetaryValue": "12.50"
+            },
+            "DiscountAmount": {
+              "CurrencyCode": "USD",
+              "MonetaryValue": "0.00"
+            },
+            "DiscountPercentage": "0",
+            "NetCharge": {
+              "CurrencyCode": "USD",
+              "MonetaryValue": "12.50"
+            }
+          },
+          "FreightDensityRate": {
+            "Density": "10.5",
+            "TotalCubicFeet": "0.463"
+          },
+          "HandlingUnits": [
+            {
+              "Quantity": "1",
+              "Type": {
+                "Code": "PLT",
+                "Description": "Pallet"
+              },
+              "Dimensions": {
+                "UnitOfMeasurement": {
+                  "Code": "IN",
+                  "Description": "Inches"
+                },
+                "Length": "10",
+                "Width": "8",
+                "Height": "6"
+              },
+              "AdjustedHeight": {
+                "Value": "6",
+                "UnitOfMeasurement": {
+                  "Code": "IN",
+                  "Description": "Inches"
+                }
+              }
+            }
+          ]
+        },
+        "ServiceOptionsCharges": {
+          "CurrencyCode": "USD",
+          "MonetaryValue": "0.00"
+        },
+        "TaxCharges": [
+          {
+            "Type": "STATE",
+            "MonetaryValue": "0.84"
+          }
+        ],
+        "TotalCharges": {
+          "CurrencyCode": "USD",
+          "MonetaryValue": "12.50"
+        },
+        "TotalChargesWithTaxes": {
+          "CurrencyCode": "USD",
+          "MonetaryValue": "13.34"
+        },
+        "NegotiatedRateCharges": {
+          "BaseServiceCharge": [
+            {
+              "CurrencyCode": "USD",
+              "MonetaryValue": "9.50"
+            }
+          ],
+          "RateModifier": [
+            {
+              "ModifierType": "DISCOUNT",
+              "ModifierDesc": "Volume Discount",
+              "Amount": "1.00"
+            }
+          ],
+          "ItemizedCharges": [
+            {
+              "Code": "375",
+              "Description": "Fuel Surcharge",
+              "CurrencyCode": "USD",
+              "MonetaryValue": "1.80",
+              "SubType": ""
+            }
+          ],
+          "TaxCharges": [
+            {
+              "Type": "STATE",
+              "MonetaryValue": "0.76"
+            }
+          ],
+          "TotalCharge": {
+            "CurrencyCode": "USD",
+            "MonetaryValue": "11.30"
+          },
+          "TotalChargesWithTaxes": {
+            "CurrencyCode": "USD",
+            "MonetaryValue": "12.06"
+          }
+        },
+        "RatedPackage": [
+          {
+            "BaseServiceCharge": {
+              "CurrencyCode": "USD",
+              "MonetaryValue": "10.50"
+            },
+            "TransportationCharges": {
+              "CurrencyCode": "USD",
+              "MonetaryValue": "10.50"
+            },
+            "ServiceOptionsCharges": {
+              "CurrencyCode": "USD",
+              "MonetaryValue": "0.00"
+            },
+            "TotalCharges": {
+              "CurrencyCode": "USD",
+              "MonetaryValue": "12.50"
+            },
+            "Weight": "5.0",
+            "BillingWeight": {
+              "UnitOfMeasurement": {
+                "Code": "LBS",
+                "Description": "Pounds"
+              },
+              "Weight": "5.0"
+            },
+            "Accessorial": [
+              {
+                "Code": "375",
+                "Description": "Fuel Surcharge"
+              }
+            ],
+            "ItemizedCharges": [
+              {
+                "Code": "375",
+                "Description": "Fuel Surcharge",
+                "CurrencyCode": "USD",
+                "MonetaryValue": "2.00",
+                "SubType": ""
+              }
+            ],
+            "NegotiatedCharges": {
+              "RateModifier": [
+                {
+                  "ModifierType": "DISCOUNT",
+                  "ModifierDesc": "Volume Discount",
+                  "Amount": "1.00"
+                }
+              ],
+              "ItemizedCharges": [
+                {
+                  "Code": "375",
+                  "Description": "Fuel Surcharge",
+                  "CurrencyCode": "USD",
+                  "MonetaryValue": "1.80",
+                  "SubType": ""
+                }
+              ]
+            },
+            "SimpleRate": {
+              "Code": "XS"
+            },
+            "RateModifier": [
+              {
+                "ModifierType": "DISCOUNT",
+                "ModifierDesc": "Volume Discount",
+                "Amount": "1.00"
+              }
+            ]
+          }
+        ],
+        "TimeInTransit": {
+          "PickupDate": "20250208",
+          "DocumentsOnlyIndicator": "N",
+          "PackageBillType": "03",
+          "ServiceSummary": {
+            "Service": {
+              "Description": "UPS Ground"
+            },
+            "GuaranteedIndicator": "N",
+            "Disclaimer": "All service guarantees are suspended.",
+            "EstimatedArrival": {
+              "Arrival": {
+                "Date": "20250212",
+                "Time": "170000"
+              },
+              "BusinessDaysInTransit": "3",
+              "Pickup": {
+                "Date": "20250208",
+                "Time": "140000"
+              },
+              "DayOfWeek": "Wednesday",
+              "CustomerCenterCutoff": "180000",
+              "DelayCount": "0",
+              "HolidayCount": "0",
+              "RestDays": "2",
+              "TotalTransitDays": "4"
+            },
+            "SaturdayDelivery": "N",
+            "SaturdayDeliveryDisclaimer": "Saturday delivery not available for this service",
+            "SundayDelivery": "N",
+            "SundayDeliveryDisclaimer": "Sunday delivery not available for this service"
+          },
+          "AutoDutyCode": "02",
+          "Disclaimer": "Delivery dates are not guaranteed."
+        },
+        "GuaranteedDelivery": {
+          "BusinessDaysInTransit": "3",
+          "DeliveryByTime": "170000",
+          "ScheduledDeliveryDate": "20250212"
+        },
+        "RoarRatedIndicator": ""
+      },
+      {
+        "Disclaimer": [
+          {
+            "Code": "01",
+            "Description": "Taxes are included in the shipping cost and apply to the transportation charges but additional duties/taxes may apply and are not reflected in the total amount due."
+          }
+        ],
+        "Service": {
+          "Code": "02",
+          "Description": "UPS 2nd Day Air"
+        },
+        "RateChart": "1",
+        "Zone": "004",
+        "RatedShipmentAlert": [
+          {
+            "Code": "110971",
+            "Description": "Your invoice may vary from the displayed reference rates"
+          }
+        ],
+        "BillableWeightCalculationMethod": "02",
+        "RatingMethod": "01",
+        "BillingWeight": {
+          "UnitOfMeasurement": {
+            "Code": "LBS",
+            "Description": "Pounds"
+          },
+          "Weight": "5.0"
+        },
+        "TransportationCharges": {
+          "CurrencyCode": "USD",
+          "MonetaryValue": "25.50"
+        },
+        "BaseServiceCharge": {
+          "CurrencyCode": "USD",
+          "MonetaryValue": "25.50"
+        },
+        "ItemizedCharges": [
+          {
+            "Code": "375",
+            "Description": "Fuel Surcharge",
+            "CurrencyCode": "USD",
+            "MonetaryValue": "4.80",
+            "SubType": ""
+          }
+        ],
+        "ServiceOptionsCharges": {
+          "CurrencyCode": "USD",
+          "MonetaryValue": "0.00"
+        },
+        "TaxCharges": [
+          {
+            "Type": "STATE",
+            "MonetaryValue": "2.03"
+          }
+        ],
+        "TotalCharges": {
+          "CurrencyCode": "USD",
+          "MonetaryValue": "30.30"
+        },
+        "TotalChargesWithTaxes": {
+          "CurrencyCode": "USD",
+          "MonetaryValue": "32.33"
+        },
+        "NegotiatedRateCharges": {
+          "BaseServiceCharge": [
+            {
+              "CurrencyCode": "USD",
+              "MonetaryValue": "23.00"
+            }
+          ],
+          "RateModifier": [
+            {
+              "ModifierType": "DISCOUNT",
+              "ModifierDesc": "Volume Discount",
+              "Amount": "2.50"
+            }
+          ],
+          "ItemizedCharges": [
+            {
+              "Code": "375",
+              "Description": "Fuel Surcharge",
+              "CurrencyCode": "USD",
+              "MonetaryValue": "4.32",
+              "SubType": ""
+            }
+          ],
+          "TaxCharges": [
+            {
+              "Type": "STATE",
+              "MonetaryValue": "1.83"
+            }
+          ],
+          "TotalCharge": {
+            "CurrencyCode": "USD",
+            "MonetaryValue": "27.32"
+          },
+          "TotalChargesWithTaxes": {
+            "CurrencyCode": "USD",
+            "MonetaryValue": "29.15"
+          }
+        },
+        "RatedPackage": [
+          {
+            "BaseServiceCharge": {
+              "CurrencyCode": "USD",
+              "MonetaryValue": "25.50"
+            },
+            "TransportationCharges": {
+              "CurrencyCode": "USD",
+              "MonetaryValue": "25.50"
+            },
+            "ServiceOptionsCharges": {
+              "CurrencyCode": "USD",
+              "MonetaryValue": "0.00"
+            },
+            "TotalCharges": {
+              "CurrencyCode": "USD",
+              "MonetaryValue": "30.30"
+            },
+            "Weight": "5.0",
+            "BillingWeight": {
+              "UnitOfMeasurement": {
+                "Code": "LBS",
+                "Description": "Pounds"
+              },
+              "Weight": "5.0"
+            },
+            "Accessorial": [
+              {
+                "Code": "375",
+                "Description": "Fuel Surcharge"
+              }
+            ],
+            "ItemizedCharges": [
+              {
+                "Code": "375",
+                "Description": "Fuel Surcharge",
+                "CurrencyCode": "USD",
+                "MonetaryValue": "4.80",
+                "SubType": ""
+              }
+            ],
+            "NegotiatedCharges": {
+              "RateModifier": [
+                {
+                  "ModifierType": "DISCOUNT",
+                  "ModifierDesc": "Volume Discount",
+                  "Amount": "2.50"
+                }
+              ],
+              "ItemizedCharges": [
+                {
+                  "Code": "375",
+                  "Description": "Fuel Surcharge",
+                  "CurrencyCode": "USD",
+                  "MonetaryValue": "4.32",
+                  "SubType": ""
+                }
+              ]
+            },
+            "SimpleRate": {
+              "Code": "M"
+            },
+            "RateModifier": [
+              {
+                "ModifierType": "DISCOUNT",
+                "ModifierDesc": "Volume Discount",
+                "Amount": "2.50"
+              }
+            ]
+          }
+        ],
+        "TimeInTransit": {
+          "PickupDate": "20250208",
+          "DocumentsOnlyIndicator": "N",
+          "PackageBillType": "03",
+          "ServiceSummary": {
+            "Service": {
+              "Description": "UPS 2nd Day Air"
+            },
+            "GuaranteedIndicator": "Y",
+            "Disclaimer": "",
+            "EstimatedArrival": {
+              "Arrival": {
+                "Date": "20250210",
+                "Time": "103000"
+              },
+              "BusinessDaysInTransit": "2",
+              "Pickup": {
+                "Date": "20250208",
+                "Time": "140000"
+              },
+              "DayOfWeek": "Monday",
+              "CustomerCenterCutoff": "180000",
+              "DelayCount": "0",
+              "HolidayCount": "0",
+              "RestDays": "0",
+              "TotalTransitDays": "2"
+            },
+            "SaturdayDelivery": "N",
+            "SaturdayDeliveryDisclaimer": "Saturday delivery not available for this service",
+            "SundayDelivery": "N",
+            "SundayDeliveryDisclaimer": "Sunday delivery not available for this service"
+          },
+          "AutoDutyCode": "02",
+          "Disclaimer": ""
+        },
+        "GuaranteedDelivery": {
+          "BusinessDaysInTransit": "2",
+          "DeliveryByTime": "103000",
+          "ScheduledDeliveryDate": "20250210"
+        },
+        "RoarRatedIndicator": ""
+      },
+      {
+        "Disclaimer": [
+          {
+            "Code": "01",
+            "Description": "Taxes are included in the shipping cost and apply to the transportation charges but additional duties/taxes may apply and are not reflected in the total amount due."
+          }
+        ],
+        "Service": {
+          "Code": "01",
+          "Description": "UPS Next Day Air"
+        },
+        "RateChart": "1",
+        "Zone": "004",
+        "RatedShipmentAlert": [
+          {
+            "Code": "110971",
+            "Description": "Your invoice may vary from the displayed reference rates"
+          }
+        ],
+        "BillableWeightCalculationMethod": "02",
+        "RatingMethod": "01",
+        "BillingWeight": {
+          "UnitOfMeasurement": {
+            "Code": "LBS",
+            "Description": "Pounds"
+          },
+          "Weight": "5.0"
+        },
+        "TransportationCharges": {
+          "CurrencyCode": "USD",
+          "MonetaryValue": "48.75"
+        },
+        "BaseServiceCharge": {
+          "CurrencyCode": "USD",
+          "MonetaryValue": "48.75"
+        },
+        "ItemizedCharges": [
+          {
+            "Code": "375",
+            "Description": "Fuel Surcharge",
+            "CurrencyCode": "USD",
+            "MonetaryValue": "9.20",
+            "SubType": ""
+          }
+        ],
+        "ServiceOptionsCharges": {
+          "CurrencyCode": "USD",
+          "MonetaryValue": "0.00"
+        },
+        "TaxCharges": [
+          {
+            "Type": "STATE",
+            "MonetaryValue": "3.88"
+          }
+        ],
+        "TotalCharges": {
+          "CurrencyCode": "USD",
+          "MonetaryValue": "57.95"
+        },
+        "TotalChargesWithTaxes": {
+          "CurrencyCode": "USD",
+          "MonetaryValue": "61.83"
+        },
+        "NegotiatedRateCharges": {
+          "BaseServiceCharge": [
+            {
+              "CurrencyCode": "USD",
+              "MonetaryValue": "44.00"
+            }
+          ],
+          "RateModifier": [
+            {
+              "ModifierType": "DISCOUNT",
+              "ModifierDesc": "Volume Discount",
+              "Amount": "4.75"
+            }
+          ],
+          "ItemizedCharges": [
+            {
+              "Code": "375",
+              "Description": "Fuel Surcharge",
+              "CurrencyCode": "USD",
+              "MonetaryValue": "8.30",
+              "SubType": ""
+            }
+          ],
+          "TaxCharges": [
+            {
+              "Type": "STATE",
+              "MonetaryValue": "3.50"
+            }
+          ],
+          "TotalCharge": {
+            "CurrencyCode": "USD",
+            "MonetaryValue": "52.30"
+          },
+          "TotalChargesWithTaxes": {
+            "CurrencyCode": "USD",
+            "MonetaryValue": "55.80"
+          }
+        },
+        "RatedPackage": [
+          {
+            "BaseServiceCharge": {
+              "CurrencyCode": "USD",
+              "MonetaryValue": "48.75"
+            },
+            "TransportationCharges": {
+              "CurrencyCode": "USD",
+              "MonetaryValue": "48.75"
+            },
+            "ServiceOptionsCharges": {
+              "CurrencyCode": "USD",
+              "MonetaryValue": "0.00"
+            },
+            "TotalCharges": {
+              "CurrencyCode": "USD",
+              "MonetaryValue": "57.95"
+            },
+            "Weight": "5.0",
+            "BillingWeight": {
+              "UnitOfMeasurement": {
+                "Code": "LBS",
+                "Description": "Pounds"
+              },
+              "Weight": "5.0"
+            },
+            "Accessorial": [
+              {
+                "Code": "375",
+                "Description": "Fuel Surcharge"
+              }
+            ],
+            "ItemizedCharges": [
+              {
+                "Code": "375",
+                "Description": "Fuel Surcharge",
+                "CurrencyCode": "USD",
+                "MonetaryValue": "9.20",
+                "SubType": ""
+              }
+            ],
+            "NegotiatedCharges": {
+              "RateModifier": [
+                {
+                  "ModifierType": "DISCOUNT",
+                  "ModifierDesc": "Volume Discount",
+                  "Amount": "4.75"
+                }
+              ],
+              "ItemizedCharges": [
+                {
+                  "Code": "375",
+                  "Description": "Fuel Surcharge",
+                  "CurrencyCode": "USD",
+                  "MonetaryValue": "8.30",
+                  "SubType": ""
+                }
+              ]
+            },
+            "SimpleRate": {
+              "Code": "L"
+            },
+            "RateModifier": [
+              {
+                "ModifierType": "DISCOUNT",
+                "ModifierDesc": "Volume Discount",
+                "Amount": "4.75"
+              }
+            ]
+          }
+        ],
+        "TimeInTransit": {
+          "PickupDate": "20250208",
+          "DocumentsOnlyIndicator": "N",
+          "PackageBillType": "03",
+          "ServiceSummary": {
+            "Service": {
+              "Description": "UPS Next Day Air"
+            },
+            "GuaranteedIndicator": "Y",
+            "Disclaimer": "",
+            "EstimatedArrival": {
+              "Arrival": {
+                "Date": "20250209",
+                "Time": "103000"
+              },
+              "BusinessDaysInTransit": "1",
+              "Pickup": {
+                "Date": "20250208",
+                "Time": "140000"
+              },
+              "DayOfWeek": "Sunday",
+              "CustomerCenterCutoff": "180000",
+              "DelayCount": "0",
+              "HolidayCount": "0",
+              "RestDays": "0",
+              "TotalTransitDays": "1"
+            },
+            "SaturdayDelivery": "N",
+            "SaturdayDeliveryDisclaimer": "Saturday delivery not available for this service",
+            "SundayDelivery": "N",
+            "SundayDeliveryDisclaimer": "Sunday delivery not available for this service"
+          },
+          "AutoDutyCode": "02",
+          "Disclaimer": ""
+        },
+        "GuaranteedDelivery": {
+          "BusinessDaysInTransit": "1",
+          "DeliveryByTime": "103000",
+          "ScheduledDeliveryDate": "20250209"
+        },
+        "RoarRatedIndicator": ""
+      }
+    ]
+  }
+}

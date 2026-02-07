@@ -64,6 +64,8 @@ Service {
 
 
 Response {
+   
+    RatedShipment [{
     TotalCharges {
         CurrencyCode
         MonetaryValue
@@ -72,11 +74,10 @@ Response {
         CurrencyCode
         MonetaryValue
     }
-    RatedShipment [{
-        Service {
-            Code
-            Description
-        }
+    Service {
+        Code
+        Description
+    }
     }]
 }
 
