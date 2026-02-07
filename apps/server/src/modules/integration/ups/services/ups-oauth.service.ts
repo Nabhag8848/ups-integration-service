@@ -1,6 +1,15 @@
 import { AbstractOAuthService } from '@/modules/api/oauth/services/abstract-oauth.service';
 import { UPSOAuthResponseDto } from '@/modules/integration/ups/dtos';
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  HttpException,
+  HttpStatus,
+  Injectable,
+  OnModuleInit,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { AxiosError } from 'axios';
 import { ConfigService } from '@nestjs/config';
 import { firstValueFrom } from 'rxjs';
 import { HttpService } from '@nestjs/axios';
@@ -61,22 +70,44 @@ export class UPSOAuthService
       grant_type: 'client_credentials',
     });
 
-    const response = await firstValueFrom(
-      this.httpService.post<UPSOAuthResponseDto>(
-        this.clientCredentialsEndpoint,
-        formData.toString(),
-        {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            Accept: 'application/json',
-            'x-merchant-id': this.merchantId,
-            Authorization,
-          },
-        }
-      )
-    );
+    try {
+      const response = await firstValueFrom(
+        this.httpService.post<UPSOAuthResponseDto>(
+          this.clientCredentialsEndpoint,
+          formData.toString(),
+          {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              Accept: 'application/json',
+              'x-merchant-id': this.merchantId,
+              Authorization,
+            },
+          }
+        )
+      );
 
-    return response.data;
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        const status = error.response?.status;
+
+        switch (status) {
+          case 400:
+            throw new BadRequestException('Invalid request');
+          case 401:
+            throw new UnauthorizedException('Unauthorized request');
+          case 403:
+            throw new ForbiddenException('Blocked merchant');
+          case 429:
+            throw new HttpException(
+              'Rate limit exceeded',
+              HttpStatus.TOO_MANY_REQUESTS
+            );
+        }
+      }
+
+      throw error;
+    }
   }
 
   protected async listenForTokenExpiry(): Promise<void> {

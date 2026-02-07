@@ -1,4 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  HttpException,
+  HttpStatus,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { AxiosError } from 'axios';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
 import { firstValueFrom } from 'rxjs';
@@ -39,15 +47,39 @@ export class UPSRateService extends AbstractRateService<UPSRateRequestDto> {
     const { service } = shipment;
     const endpointPath = service?.Code ? '/Rate' : '/Shop';
 
-    const response = await firstValueFrom(
-      this.httpService.post(`${this.ratingEndpoint}${endpointPath}`, body, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-      })
-    );
+    let response;
+
+    try {
+      response = await firstValueFrom(
+        this.httpService.post(`${this.ratingEndpoint}${endpointPath}`, body, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
+        })
+      );
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        const status = error.response?.status;
+
+        switch (status) {
+          case 400:
+            throw new BadRequestException('Invalid request');
+          case 401:
+            throw new UnauthorizedException('Unauthorized request');
+          case 403:
+            throw new ForbiddenException('Blocked merchant');
+          case 429:
+            throw new HttpException(
+              'Rate limit exceeded',
+              HttpStatus.TOO_MANY_REQUESTS
+            );
+        }
+      }
+
+      throw error;
+    }
 
     const ratedShipments = response.data?.RateResponse?.RatedShipment ?? [];
     const shipments = Array.isArray(ratedShipments)
