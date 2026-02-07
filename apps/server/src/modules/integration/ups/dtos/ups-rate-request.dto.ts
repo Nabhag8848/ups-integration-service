@@ -32,7 +32,7 @@ export class UPSRateRequestDto {
       obj.service
         ? {
             Code: UNIFIED_TO_UPS_SERVICE_CODE[
-              obj.service.code as ShippingServiceCode
+              obj.service.type as ShippingServiceCode
             ],
           }
         : undefined,

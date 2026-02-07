@@ -31,6 +31,6 @@ curl -s -X POST http://localhost:3000/v1/rates/ups \
       }
     ],
     "service": {
-      "code": "GROUND"
+      "type": "GROUND"
     }
   }' | jq .

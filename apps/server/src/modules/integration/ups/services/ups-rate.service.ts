@@ -57,7 +57,7 @@ export class UPSRateService extends AbstractRateService<UPSRateRequestDto> {
     return {
       quotes: shipments.map((rated) => ({
         service: {
-          code:
+          type:
             UPS_TO_UNIFIED_SERVICE_CODE[rated.Service.Code] ??
             rated.Service.Code,
         },

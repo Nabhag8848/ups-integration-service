@@ -3,5 +3,5 @@ import { ShippingServiceCode } from '@/modules/api/rates/enum';
 
 export class RateServiceDto {
   @IsEnum(ShippingServiceCode)
-  code: ShippingServiceCode;
+  type: ShippingServiceCode;
 }
