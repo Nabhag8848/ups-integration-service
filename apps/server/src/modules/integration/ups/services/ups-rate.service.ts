@@ -25,13 +25,13 @@ export class UPSRateService extends AbstractRateService<
   }
 
   @TransformRequestPayload(UPSRateRequestDto)
-  async getShippingRates(request: UPSRateRequestDto): Promise<unknown> {
+  async getShippingRates(shipment: UPSRateRequestDto): Promise<unknown> {
     const accessToken = await this.upsOAuthService.getAccessToken();
 
     const body = {
       RateRequest: {
         Request: { Subversion: '2409' },
-        Shipment: request,
+        Shipment: shipment,
       },
     };
 

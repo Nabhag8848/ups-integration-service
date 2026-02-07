@@ -29,30 +29,15 @@ export class UPSOAuthService
   private merchantId: string;
 
   async onModuleInit() {
-    const clientId = this.configService.get<string | undefined>(
-      'UPS_CLIENT_ID'
+    const clientId = this.configService.getOrThrow<string>('UPS_CLIENT_ID');
+    const clientSecret =
+      this.configService.getOrThrow<string>('UPS_CLIENT_SECRET');
+    const clientCredentialsEndpoint = this.configService.getOrThrow<string>(
+      'UPS_CLIENT_CREDENTIALS_ENDPOINT'
     );
-    const clientSecret = this.configService.get<string | undefined>(
-      'UPS_CLIENT_SECRET'
-    );
-    const clientCredentialsEndpoint = this.configService.get<
-      string | undefined
-    >('UPS_CLIENT_CREDENTIALS_ENDPOINT');
-    const merchantId = this.configService.get<string | undefined>(
+    const merchantId = this.configService.getOrThrow<string | undefined>(
       'UPS_MERCHANT_ID'
     );
-
-    if (!clientId || !clientSecret) {
-      throw new Error('UPS_CLIENT_ID and UPS_CLIENT_SECRET must be set');
-    }
-
-    if (!clientCredentialsEndpoint) {
-      throw new Error('UPS_CLIENT_CREDENTIALS_ENDPOINT must be set');
-    }
-
-    if (!merchantId) {
-      throw new Error('UPS_MERCHANT_ID must be set');
-    }
 
     this.clientId = clientId;
     this.clientSecret = clientSecret;
