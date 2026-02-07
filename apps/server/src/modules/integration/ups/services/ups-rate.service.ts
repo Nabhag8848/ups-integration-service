@@ -35,8 +35,11 @@ export class UPSRateService extends AbstractRateService<UPSRateRequestDto> {
       },
     };
 
+    const { service } = shipment;
+    const endpointPath = service?.Code ? '/Rate' : '/Shop';
+
     const response = await firstValueFrom(
-      this.httpService.post(`${this.ratingEndpoint}/Shop`, body, {
+      this.httpService.post(`${this.ratingEndpoint}${endpointPath}`, body, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
           'Content-Type': 'application/json',
