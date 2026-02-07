@@ -32,5 +32,5 @@ export abstract class AbstractOAuthService<T> {
    * This will be used to get the carrier's access token
    * @returns The carrier's access token
    */
-  protected abstract getAccessToken(): Promise<string>;
+  abstract getAccessToken(): Promise<string>;
 }

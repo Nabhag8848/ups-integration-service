@@ -127,7 +127,7 @@ export class UPSOAuthService
     });
   }
 
-  protected async getAccessToken(): Promise<string> {
+  async getAccessToken(): Promise<string> {
     const provider = this.name;
     const clientId = this.clientId;
 
