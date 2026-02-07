@@ -43,7 +43,7 @@ export class UPSRateRequestDto {
   @Expose({ name: 'Package' })
   @Transform(
     ({ obj }) =>
-      obj.packages.map((pkg: Record<string, any>) => ({
+      obj.package.map((pkg: Record<string, any>) => ({
         Dimensions: {
           UnitOfMeasurement: {
             Code: pkg.dimensions.unitOfMeasurement,
@@ -65,5 +65,5 @@ export class UPSRateRequestDto {
       })),
     { toClassOnly: true }
   )
-  packages: Record<string, unknown>[];
+  package: Record<string, unknown>[];
 }

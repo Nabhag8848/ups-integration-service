@@ -18,7 +18,7 @@ export class GetShippingRatesRequestDto {
   @IsDefined()
   @ValidateNested({ each: true })
   @Type(() => PackageDto)
-  packages: PackageDto[];
+  package: PackageDto[];
 
   @IsOptional()
   @ValidateNested()

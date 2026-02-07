@@ -16,7 +16,7 @@ curl -s -X POST http://localhost:3000/v1/rates/ups \
       "postalCode": "30301",
       "countryCode": "US"
     },
-    "packages": [
+    "package": [
       {
         "dimensions": {
           "unitOfMeasurement": "IN",
