@@ -7,6 +7,7 @@ import { UPSRateRequestDto } from '../dtos';
 import { UPSOAuthService } from './ups-oauth.service';
 import { TransformRequestPayload } from '@/utils';
 import { RateQuotesResponseDto } from '@/modules/api/rates/dtos';
+import { UPS_TO_UNIFIED_SERVICE_CODE } from '@/modules/integration/ups/maps';
 
 @Injectable()
 export class UPSRateService extends AbstractRateService<UPSRateRequestDto> {
@@ -55,7 +56,11 @@ export class UPSRateService extends AbstractRateService<UPSRateRequestDto> {
 
     return {
       quotes: shipments.map((rated) => ({
-        service: { code: rated.Service.Code },
+        service: {
+          code:
+            UPS_TO_UNIFIED_SERVICE_CODE[rated.Service.Code] ??
+            rated.Service.Code,
+        },
         totalCharges: {
           currencyCode: rated.TotalCharges.CurrencyCode,
           monetaryValue: Number(rated.TotalCharges.MonetaryValue),

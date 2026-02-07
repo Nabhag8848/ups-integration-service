@@ -16,22 +16,21 @@ curl -s -X POST http://localhost:3000/v1/rates/ups \
       "postalCode": "30301",
       "countryCode": "US"
     },
-    "package": {
-      "packagingType": {
-        "code": "02"
-      },
-      "dimensions": {
-        "unitOfMeasurement": "IN",
-        "length": 10,
-        "width": 8,
-        "height": 6
-      },
-      "weight": {
-        "unitOfMeasurement": "LBS",
-        "weight": 5
+    "packages": [
+      {
+        "dimensions": {
+          "unitOfMeasurement": "IN",
+          "length": 10,
+          "width": 8,
+          "height": 6
+        },
+        "weight": {
+          "unitOfMeasurement": "LBS",
+          "weight": 5
+        }
       }
-    },
+    ],
     "service": {
-      "code": "03"
+      "code": "GROUND"
     }
   }' | jq .

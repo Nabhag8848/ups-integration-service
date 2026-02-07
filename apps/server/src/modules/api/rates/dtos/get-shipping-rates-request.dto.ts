@@ -2,7 +2,7 @@ import { IsDefined, IsOptional, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { AddressDto } from './address.dto';
 import { PackageDto } from './package.dto';
-import { ServiceDto } from './service.dto';
+import { RateServiceDto } from './rate-service.dto';
 
 export class GetShippingRatesRequestDto {
   @IsDefined()
@@ -16,12 +16,12 @@ export class GetShippingRatesRequestDto {
   destination: AddressDto;
 
   @IsDefined()
-  @ValidateNested()
+  @ValidateNested({ each: true })
   @Type(() => PackageDto)
-  package: PackageDto;
+  packages: PackageDto[];
 
   @IsOptional()
   @ValidateNested()
-  @Type(() => ServiceDto)
-  service?: ServiceDto;
+  @Type(() => RateServiceDto)
+  service?: RateServiceDto;
 }

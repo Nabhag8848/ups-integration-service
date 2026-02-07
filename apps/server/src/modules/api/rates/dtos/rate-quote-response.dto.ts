@@ -1,5 +1,6 @@
 import { Expose, Type } from 'class-transformer';
 import { IsNumber, IsString, ValidateNested } from 'class-validator';
+import { RateServiceDto } from './rate-service.dto';
 
 class ChargesDto {
   @Expose()
@@ -9,12 +10,6 @@ class ChargesDto {
   @Expose()
   @IsNumber()
   monetaryValue: number;
-}
-
-class RateServiceDto {
-  @Expose()
-  @IsString()
-  code: string;
 }
 
 class RateQuoteDto {
