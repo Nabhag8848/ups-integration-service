@@ -19,6 +19,7 @@ export class RatesController {
   @ApiOperation({ summary: 'Get shipping rates for a carrier' })
   @ApiParam({ name: 'carrier', example: 'ups', description: 'Carrier identifier' })
   @ApiResponse({ status: 200, type: RateQuotesResponseDto })
+  @ApiResponse({ status: 400, description: 'Invalid request payload' })
   @ApiResponse({ status: 404, description: 'Carrier not found' })
   async getShippingRates(
     @Param('carrier') carrier: string,
