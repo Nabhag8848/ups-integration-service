@@ -1,5 +1,7 @@
 # UPS Integration Service
 
+Carrier Integration Service for fetching shipping rate quotes through carrier-specific adapters (currently UPS) using a unified API contract.
+
 ## Local Setup
 
 ### 1. Start Infrastructure
