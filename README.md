@@ -66,6 +66,31 @@ npx nx start server
 
 Server starts at `http://localhost:3000`.
 
+### 6. Run Tests
+
+Run the UPS rate service spec:
+
+```bash
+npx nx test server --testPathPatterns="ups-rate.service.spec"
+```
+
+## Database Diagram (ERD)
+
+Source file: `apps/server/DB_ERD.md`
+
+```mermaid
+erDiagram
+  carrier {
+    uuid id PK
+    timestamp createdAt
+    timestamp updatedAt
+    varchar clientId
+    varchar provider
+    text accessToken
+    timestamp accessTokenExpiresAt
+  }
+```
+
 ## Access Points
 
 - Application: `http://localhost:3000`
