@@ -3,17 +3,17 @@ curl -s -X POST http://localhost:3000/v1/rates/ups \
   -H "Content-Type: application/json" \
   -d '{
     "origin": {
-      "addressLines": ["100 Main St"],
-      "city": "Alpharetta",
-      "stateProvinceCode": "GA",
-      "postalCode": "30005",
+      "addressLines": ["100 Commerce Blvd", "Suite 200"],
+      "city": "TIMONIUM",
+      "stateProvinceCode": "MD",
+      "postalCode": "21093",
       "countryCode": "US"
     },
     "destination": {
-      "addressLines": ["200 Oak Ave"],
-      "city": "Atlanta",
+      "addressLines": ["742 Evergreen Terrace"],
+      "city": "Alpharetta",
       "stateProvinceCode": "GA",
-      "postalCode": "30301",
+      "postalCode": "30005",
       "countryCode": "US"
     },
     "package": [
