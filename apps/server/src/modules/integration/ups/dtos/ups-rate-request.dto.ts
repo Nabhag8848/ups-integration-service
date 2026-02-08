@@ -12,19 +12,19 @@ export class UPSRateRequestDto {
   @Transform(({ obj }) => ({ Address: mapAddress(obj.origin) }), {
     toClassOnly: true,
   })
-  shipper: { Address: Record<string, unknown> };
+  Shipper: { Address: Record<string, unknown> };
 
   @Expose({ name: 'ShipFrom' })
   @Transform(({ obj }) => ({ Address: mapAddress(obj.origin) }), {
     toClassOnly: true,
   })
-  shipFrom: { Address: Record<string, unknown> };
+  ShipFrom: { Address: Record<string, unknown> };
 
   @Expose({ name: 'ShipTo' })
   @Transform(({ obj }) => ({ Address: mapAddress(obj.destination) }), {
     toClassOnly: true,
   })
-  shipTo: { Address: Record<string, unknown> };
+  ShipTo: { Address: Record<string, unknown> };
 
   @Expose({ name: 'Service' })
   @Transform(
@@ -38,7 +38,7 @@ export class UPSRateRequestDto {
         : undefined,
     { toClassOnly: true }
   )
-  service?: { Code: string };
+  Service?: { Code: string };
 
   @Expose({ name: 'Package' })
   @Transform(
@@ -65,5 +65,5 @@ export class UPSRateRequestDto {
       })),
     { toClassOnly: true }
   )
-  package: Record<string, unknown>[];
+  Package: Record<string, unknown>[];
 }
