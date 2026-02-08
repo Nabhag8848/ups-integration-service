@@ -67,6 +67,7 @@ npx nx start server
 ```
 
 Server starts at `http://localhost:3000`.
+Swagger docs are available at `http://localhost:3000/v1/swagger`.
 
 ### 6. Run Tests
 
@@ -85,7 +86,6 @@ https://github.com/user-attachments/assets/5e197c68-50d6-44bd-90cc-e2100792c8b3
 
 - Application: `http://localhost:3000`
 - Health Check: `http://localhost:3000/v1/health`
-- API Docs (Swagger): `http://localhost:3000/v1/swagger`
 - Redis UI: `http://localhost:8001`
 
 
