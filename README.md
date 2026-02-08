@@ -73,6 +73,192 @@ Run the UPS rate service spec:
 ```bash
 npx nx test server --testPathPatterns="ups-rate.service.spec"
 ```
+## Access Points
+
+- Application: `http://localhost:3000`
+- Health Check: `http://localhost:3000/v1/health`
+- API Docs (Swagger): `http://localhost:3000/v1/swagger`
+- Redis UI: `http://localhost:8001`
+
+
+## Design Decisions
+
+### 1. Architecture and Extensibility
+
+- Carrier integrations are isolated per module (`UPSModule`) and registered at startup through registries.
+- `RatesRegistryService` resolves rate providers by `name`, so the controller is carrier-agnostic.
+- `OAuthRegistryService` does the same for OAuth providers.
+- To add FedEx, implement `FedExRateService extends AbstractRateService` and `FedExOAuthService extends AbstractOAuthService`, register them in a `FedExModule`, and call `registerService` on module init. Existing UPS code does not need to be modified.
+
+### 2. Types and Domain Modeling
+
+- Internal API contracts use unified DTOs (`GetShippingRatesRequestDto`, `RateQuotesResponseDto`).
+- Carrier-specific payloads use integration DTOs (`UPSRateRequestDto`).
+- `@TransformRequestPayload(UPSRateRequestDto)` creates a clear boundary between internal domain models and UPS wire format.
+- Service-code translation is centralized in mapping files (`UNIFIED_TO_UPS_SERVICE_CODE`, `UPS_TO_UNIFIED_SERVICE_CODE`), keeping mapping logic out of controller/service orchestration paths.
+
+### 3. OAuth Implementation
+
+- `UPSOAuthService` encapsulates the complete token lifecycle.
+- It reads credentials/endpoints from config on module init.
+- It reuses cached tokens when available.
+- It exchanges client credentials when cache miss occurs.
+- It persists token and expiry in database/cache through `CarrierService`.
+- It enables Redis keyspace/keyevent notifications (`notify-keyspace-events=KEx`) and listens for token-key expiry events.
+- Token cache TTL is set with a 120-second refresh buffer, so refresh is triggered around 2 minutes before real token expiry.
+- `UPSRateService` only calls `getAccessToken()`, so token management remains transparent to the rate-calling flow.
+
+### 4. Error Handling
+
+- UPS HTTP errors are mapped to actionable framework exceptions.
+- `400 -> BadRequestException`
+- `401 -> UnauthorizedException`
+- `403 -> ForbiddenException`
+- `429 -> HttpException(TOO_MANY_REQUESTS)`
+- Unknown Axios statuses, timeout/no-response Axios errors, and non-Axios errors are re-thrown as-is to avoid swallowing failures.
+
+### 5. Integration Test Strategy
+
+- The UPS integration spec is stubbed end-to-end at service level (no real UPS calls).
+- Tests verify request transformation from unified model to UPS request body.
+- Tests verify endpoint selection (`/Rate` vs `/Shop`).
+- Tests verify authorization header/token usage.
+- Tests verify response parsing for single and multiple `RatedShipment` shapes.
+- Tests verify monetary string-to-number conversion.
+- Tests verify service code mapping behavior.
+- Tests verify error mapping and passthrough behavior.
+- Fixture-based test data (`fixtures/*.ts`) keeps request/response/error scenarios deterministic and reusable.
+
+### 6. Code Quality and Readability
+
+- Responsibility is split by concern (controller, registry, OAuth service, rate service, DTOs, maps, fixtures).
+- Naming follows intent-revealing conventions (`getShippingRates`, `exchangeCredentialsForToken`, `listenForTokenExpiry`).
+- TypeScript types are used across request/response contracts and abstract service interfaces.
+- Comments are used where intent or test scope needs clarification (especially fixtures and integration spec setup).
+
+## Adding a New Carrier (Boilerplate)
+
+Use UPS as the reference pattern. The goal is to plug in a new carrier without modifying existing UPS logic.
+
+### 1. Create module structure
+
+Create:
+
+- `apps/server/src/modules/integration/fedex/fedex.module.ts`
+- `apps/server/src/modules/integration/fedex/services/fedex-rate.service.ts`
+- `apps/server/src/modules/integration/fedex/services/fedex-oauth.service.ts`
+- `apps/server/src/modules/integration/fedex/dtos/fedex-rate-request.dto.ts`
+- `apps/server/src/modules/integration/fedex/maps/fedex-service-code.map.ts`
+
+### 2. Implement carrier module and registry registration
+
+```ts
+@Module({
+  imports: [HttpModule, RedisModule, CarrierModule],
+  providers: [FedExOAuthService, FedExRateService],
+  exports: [FedExRateService],
+})
+export class FedExModule implements OnModuleInit {
+  constructor(
+    private readonly oauthRegistryService: OAuthRegistryService,
+    private readonly ratesRegistryService: RatesRegistryService,
+    private readonly fedExOAuthService: FedExOAuthService,
+    private readonly fedExRateService: FedExRateService
+  ) {}
+
+  async onModuleInit() {
+    this.oauthRegistryService.registerService(this.fedExOAuthService);
+    this.ratesRegistryService.registerService(this.fedExRateService);
+  }
+}
+```
+
+### 3. Implement OAuth service (token lifecycle)
+
+```ts
+@Injectable()
+export class FedExOAuthService
+  extends AbstractOAuthService<FedExOAuthResponseDto>
+  implements OnModuleInit
+{
+  readonly name = 'fedex';
+
+  async onModuleInit() {
+    // Load config values here.
+    await this.listenForTokenExpiry();
+  }
+
+  protected async getClientCredentialsEndpoint(): Promise<string> {
+    return 'https://example-fedex/oauth/token';
+  }
+
+  protected async exchangeCredentialsForToken(): Promise<FedExOAuthResponseDto> {
+    // Call provider OAuth endpoint and return token payload.
+    return new FedExOAuthResponseDto();
+  }
+
+  protected async listenForTokenExpiry(): Promise<void> {
+    // Subscribe to expiry events and refresh token.
+  }
+
+  async getAccessToken(): Promise<string> {
+    // Cache-first: if miss, fetch token and persist with expiry.
+    return 'token';
+  }
+}
+```
+
+### 4. Implement rate service with request transformation
+
+```ts
+@Injectable()
+export class FedExRateService extends AbstractRateService<FedExRateRequestDto> {
+  readonly name = 'fedex';
+
+  constructor(private readonly fedExOAuthService: FedExOAuthService) {
+    super();
+  }
+
+  @TransformRequestPayload(FedExRateRequestDto)
+  async getShippingRates(
+    shipment: FedExRateRequestDto
+  ): Promise<RateQuotesResponseDto> {
+    const token = await this.fedExOAuthService.getAccessToken();
+    // Call FedEx API and map response to unified quote format.
+    return { quotes: [] };
+  }
+}
+```
+
+### 5. Wire integration module
+
+Add `FedExModule` to `apps/server/src/modules/integration/integration.module.ts` imports/exports.
+
+### 6. Add environment variables
+
+Add carrier-specific keys to `apps/server/.env.example`. Example:
+
+```env
+FEDEX_CLIENT_ID=fedex-client-id
+FEDEX_CLIENT_SECRET=fedex-client-secret
+FEDEX_CLIENT_CREDENTIALS_ENDPOINT=https://apis.fedex.com/oauth/token
+FEDEX_RATING_ENDPOINT=https://apis.fedex.com/rate/v1/rates/quotes
+```
+
+### 7. Add test fixtures and integration spec
+
+Mirror the UPS pattern:
+
+- `services/__tests__/fixtures/fedex-rate-request.fixture.ts`
+- `services/__tests__/fixtures/fedex-rate-response.fixture.ts`
+- `services/__tests__/fixtures/fedex-error.fixture.ts`
+- `services/__tests__/fedex-rate.service.spec.ts`
+
+Run:
+
+```bash
+npx nx test server --testPathPatterns="fedex-rate.service.spec"
+```
 
 ## Database Diagram (ERD)
 
@@ -90,10 +276,3 @@ erDiagram
     timestamp accessTokenExpiresAt
   }
 ```
-
-## Access Points
-
-- Application: `http://localhost:3000`
-- Health Check: `http://localhost:3000/v1/health`
-- API Docs (Swagger): `http://localhost:3000/v1/swagger`
-- Redis UI: `http://localhost:8001`
