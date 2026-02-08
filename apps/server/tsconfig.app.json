@@ -30,6 +30,7 @@
     "jest.config.cts",
     "src/**/*.spec.ts",
     "src/**/*.test.ts",
+    "src/**/__tests__/**/*.ts",
     "eslint.config.js",
     "eslint.config.cjs",
     "eslint.config.mjs"

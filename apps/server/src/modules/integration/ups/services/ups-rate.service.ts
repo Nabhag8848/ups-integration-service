@@ -44,8 +44,8 @@ export class UPSRateService extends AbstractRateService<UPSRateRequestDto> {
       },
     };
 
-    const { service } = shipment;
-    const endpointPath = service?.Code ? '/Rate' : '/Shop';
+    const { Service } = shipment;
+    const endpointPath = Service?.Code ? '/Rate' : '/Shop';
 
     let response;
 
