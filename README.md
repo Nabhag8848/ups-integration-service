@@ -136,6 +136,14 @@ npx nx test server --testPathPatterns="ups-rate.service.spec"
 - TypeScript types are used across request/response contracts and abstract service interfaces.
 - Comments are used where intent or test scope needs clarification (especially fixtures and integration spec setup).
 
+## Improvements (Next Iterations)
+
+- **Token refresh concurrency control**: if a token expires during high traffic, multiple requests can trigger parallel token exchanges. We should add a lock/single-flight strategy (for example, Redis distributed lock per `provider + clientId`) so only one request performs token exchange while others wait and reuse the refreshed token.
+- **Access token storage hardening**: access tokens are currently stored as plain text in persistence/cache. This should be changed to stored encrypt version.
+- **Tenant-provided carrier credentials (real-world onboarding)**: currently `UPS_CLIENT_ID` and `UPS_CLIENT_SECRET` are static app-level env vars, but in production customer can have their own credentials. This requires tenant-scoped credential storage (encrypted), APIs/UI for customers to connect their carrier account, runtime credential resolution by tenant/company, token/cache keys scoped by `provider + tenant + clientId`, and OAuth/rate services updated to fetch credentials dynamically per request instead of from global env.
+- **Centralized integration HTTP error handling**: status-to-exception mapping is currently repeated in each integration service. We should extract a shared HTTP error mapper/wrapper so all carriers use one consistent mapping strategy for Axios/network/upstream errors.
+- **UPS response defensive validation before mapping**: validate UPS response shape (for example, `RateResponse`, `RatedShipment`, `TotalCharges`, `TransportationCharges`) before mapping to unified DTOs in `ups-rate.service.ts`. `App` response interceptors validate our outbound unified schema, but they do not protect the inbound external carrier payload parsing path.
+
 ## Adding a New Carrier (Boilerplate)
 
 Use UPS as the reference pattern. The goal is to plug in a new carrier without modifying existing UPS logic.
