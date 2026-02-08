@@ -69,6 +69,9 @@ npx nx start server
 Server starts at `http://localhost:3000`.
 Swagger docs are available at `http://localhost:3000/v1/swagger`.
 
+<img width="1928" height="925" alt="Screenshot 2026-02-08 at 12 53 49 PM" src="https://github.com/user-attachments/assets/202b503c-ab74-4c4b-b093-00535979bfb2" />
+
+
 ### 6. Run Tests
 
 Run the UPS rate service spec:
