@@ -73,6 +73,12 @@ Run the UPS rate service spec:
 ```bash
 npx nx test server --testPathPatterns="ups-rate.service.spec"
 ```
+
+
+
+https://github.com/user-attachments/assets/5e197c68-50d6-44bd-90cc-e2100792c8b3
+
+
 ## Access Points
 
 - Application: `http://localhost:3000`
@@ -266,21 +272,4 @@ Run:
 
 ```bash
 npx nx test server --testPathPatterns="fedex-rate.service.spec"
-```
-
-## Database Diagram (ERD)
-
-Source file: `apps/server/DB_ERD.md`
-
-```mermaid
-erDiagram
-  carrier {
-    uuid id PK
-    timestamp createdAt
-    timestamp updatedAt
-    varchar clientId
-    varchar provider
-    text accessToken
-    timestamp accessTokenExpiresAt
-  }
 ```
